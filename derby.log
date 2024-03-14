@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Mar 13 20:11:18 EDT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-018e-3a4c-891a-00000d145888 
+on database directory C:\Users\tyler\OneDrive\Desktop\School\Engineering\Software\Design with JavaFX\iPAYROLL\iPAYROLLDatabase with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@25f38edc 
+Loaded from file:/C:/Users/tyler/OneDrive/Desktop/School/Engineering/Software/Design%20with%20JavaFX/iPAYROLL/src/main/resources/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=21.0.2+13-58
+user.dir=C:\Users\tyler\OneDrive\Desktop\School\Engineering\Software\Design with JavaFX\iPAYROLL
+os.name=Windows 11
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
