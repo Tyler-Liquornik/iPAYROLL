@@ -30,8 +30,8 @@
                 <Menu mnemonicParsing="false" text="Manage Leaves" />
                 <Menu fx:id="manageUserAccountsMenu" mnemonicParsing="false" text="Manage User Accounts">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#showCreateUser" text="Create User Account" />
-                        <MenuItem mnemonicParsing="false" text="Delete User Account" />
+                        <MenuItem mnemonicParsing="false" onAction="#showCreateAccount" text="Create User Account" />
+                        <MenuItem mnemonicParsing="false" onAction="#showDeleteAccount" text="Delete User Account" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="About">

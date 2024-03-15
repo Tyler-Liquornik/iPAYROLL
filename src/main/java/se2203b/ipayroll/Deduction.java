@@ -1,6 +1,6 @@
 package se2203b.ipayroll;
-import javafx.beans.property.*;
 
+import javafx.beans.property.*;
 import java.time.LocalDate;
 
 // Class written for assignment requirements - not yet used anywhere

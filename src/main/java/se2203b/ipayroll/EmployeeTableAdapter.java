@@ -44,16 +44,18 @@ public class EmployeeTableAdapter {
         String sin = employeeProfile.getSin();
 
 
-        // Key Dates stored as yyyy-mm-dd_description1,yyyy-mm-dd_description2,yyyy-mm-dd_description3, ...
+        // Key Dates stored as description1_yyyy-mm-dd,description2_yyyy-mm-dd,...
         String keyDates = "";
 
         // Ensuring checks for null values
         if (employeeProfile.getKeyDates() != null){
-            Set<Map.Entry<LocalDate, String>> entrySet = employeeProfile.getKeyDates().entrySet();
-            for (Map.Entry<LocalDate, String> entry : entrySet){
-                keyDates += entry == null ? "" : entry.getKey().toString() + "_" + entry.getValue() + ",";
+            Set<Map.Entry<String, LocalDate>> entrySet = employeeProfile.getKeyDates().entrySet();
+            for (Map.Entry<String, LocalDate> entry : entrySet){
+                keyDates += (entry == null ? "" : entry.getKey().toString() + "_" + entry.getValue() + ",");
             }
         }
+        else
+            keyDates = null;
 
         // Must format all VARCHAR types in DB to properly deal with null values
         String query = String.format("INSERT INTO EmployeeProfiles VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
@@ -90,22 +92,25 @@ public class EmployeeTableAdapter {
             String sin = rs.getString("Sin");
 
             // Parsing from string of form yyyy-mm-dd_description
-            HashMap<LocalDate, String> keyDates = new HashMap<>();
+            HashMap<String, LocalDate> keyDates = new HashMap<>();
             if (rs.getString("KeyDates") != null)
             {
                 String[] stringEntries = rs.getString("KeyDates").split(",");
                 for (String stringEntry : stringEntries)
                 {
-                    LocalDate date = LocalDate.of(Integer.parseInt(stringEntry.substring(0, 4)),
-                            Integer.parseInt(stringEntry.substring(5, 7)),
-                            Integer.parseInt(stringEntry.substring(8, 10)));
-                    String description = stringEntry.substring(12);
-                    keyDates.put(date, description);
+                    // Start parsing the date from the separator between the description and date
+                    int separator = stringEntry.indexOf("_") + 1;
+
+                    LocalDate date = LocalDate.of(Integer.parseInt(stringEntry.substring(separator, separator + 4)),
+                            Integer.parseInt(stringEntry.substring(separator + 5,separator + 7)),
+                            Integer.parseInt(stringEntry.substring(separator + 8, separator + 10)));
+                    String description = stringEntry.substring(0, separator - 1);
+                    keyDates.put(description, date);
                 }
             }
             else keyDates = null;
 
-            return new EmployeeProfile(name, address, phoneNumber, email, maritalStatus, sin, employeeID, username, password, jobName, skillCode, keyDates);
+            return new EmployeeProfile(name, address, email, phoneNumber, maritalStatus, sin, employeeID, username, password, jobName, skillCode, keyDates);
         }
         catch (SQLException ex) {
             return null;
@@ -147,11 +152,11 @@ public class EmployeeTableAdapter {
 
 
         // Key Dates stored as yyyy-mm-dd_description1,yyyy-mm-dd_description2,yyyy-mm-dd_description3, ...
-        StringBuilder keyDates = new StringBuilder();
+        String keyDates = "";
         if (updatedProfile.getKeyDates() != null) {
-            Set<Map.Entry<LocalDate, String>> entrySet = updatedProfile.getKeyDates().entrySet();
-            for (Map.Entry<LocalDate, String> entry : entrySet) {
-                keyDates.append(entry.getKey().toString()).append("_").append(entry.getValue()).append(",");
+            Set<Map.Entry<String, LocalDate>> entrySet = updatedProfile.getKeyDates().entrySet();
+            for (Map.Entry<String, LocalDate> entry : entrySet) {
+                keyDates += entry.getKey().toString() + "_" + entry.getValue() + ",";
             }
         }
         else
@@ -164,16 +169,17 @@ public class EmployeeTableAdapter {
                         " Sin = %s WHERE EmployeeID = %s",
                 formatSQL(username), formatSQL(password), formatSQL(jobName), formatSQL(name),
                 formatSQL(address), formatSQL(email), formatSQL(phoneNumber), formatSQL(maritalStatus),
-                formatSQL(skillCode), formatSQL(keyDates.toString()), formatSQL(sin), formatSQL(employeeID));
+                formatSQL(skillCode), formatSQL(keyDates), formatSQL(sin), formatSQL(employeeID));
 
         st.execute(query);
     }
 
     public static List<EmployeeProfile> getAllEmployeeProfiles() throws SQLException {
 
-        // Get all profiles for employees, IDs start with 'E' (not admin that start with 'A')
+        // Get all profiles for employees, except A000 which cannot be accessed (default admin account)
+        // Combo Boxes populated with this method to select a profile to work with cannot access this account
         Statement st = conn.createStatement();
-        String query = "Select EmployeeID FROM EmployeeProfiles WHERE EmployeeID LIKE 'E%'";
+        String query = "Select EmployeeID FROM EmployeeProfiles WHERE EmployeeID <> 'A000'";
         ResultSet rs = st.executeQuery(query);
 
         // Build the List

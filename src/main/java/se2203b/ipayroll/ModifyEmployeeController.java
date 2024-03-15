@@ -1,7 +1,13 @@
 package se2203b.ipayroll;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,20 +31,30 @@ public class ModifyEmployeeController extends Subcontroller{
     @FXML
     private DatePicker lastPromotionDatePicker, hireDatePicker, birthDatePicker;
 
-    public void delete() throws SQLException {
-        EmployeeTableAdapter.deleteProfile("EmployeeID", employeeIDComboBox.getValue());
-        cancelButton.fire();
-    }
-
     public void clearMessageLabel(){
         messageLabel.setText("");
     }
 
-    @Override
+    public void populateFields(){
+        EmployeeProfile selected = EmployeeTableAdapter.getProfile("EmployeeID", employeeIDComboBox.getValue());
+        employeeNameField.setText(String.format("%s %s", selected.getName()[0], selected.getName()[1]));
+        provinceField.setText(selected.getAddress()[0]);
+        cityField.setText(selected.getAddress()[1]);
+        phoneField.setText(selected.getPhoneNumber());
+        postalCodeField.setText(selected.getAddress()[2]);
+        marriedField.setText(selected.getMaritalStatus());
+        skillCodeField.setText(selected.getSkillCode());
+        sinField.setText(selected.getSin());
+        jobNameField.setText(selected.getJobName());
+        birthDatePicker.setValue(selected.getKeyDates().get("Date of Birth"));
+        hireDatePicker.setValue(selected.getKeyDates().get("Date of Hire"));
+        lastPromotionDatePicker.setValue(selected.getKeyDates().get("Date of Last Promotion"));
+    }
+
     public void save() throws SQLException {
         // Ensure an option has been chosen in the Combo Box
         if (Objects.equals(employeeIDComboBox.getValue(), null)) {
-            messageLabel.setText("Choose an employeeID from the combo box");
+            messageLabel.setText("Choose an Employee ID from the combo box");
         }
         // Validate the employee's name has only a first name and last name
         else if (employeeNameField.getText().split(" ").length != 2){
@@ -59,10 +75,10 @@ public class ModifyEmployeeController extends Subcontroller{
             String jobName = Objects.equals(jobNameField.getText(), "") ? null : jobNameField.getText();
             String employeeID = employeeIDComboBox.getValue();
 
-            HashMap<LocalDate, String> keyDates = new HashMap<>();
-            keyDates.put(birthDatePicker.getValue(), "Date of Birth");
-            keyDates.put(hireDatePicker.getValue(), "Date of Hire");
-            keyDates.put(lastPromotionDatePicker.getValue(), "Date of Last Promotion");
+            HashMap<String, LocalDate> keyDates = new HashMap<>();
+            keyDates.put("Date of Birth", birthDatePicker.getValue());
+            keyDates.put("Date of Hire", hireDatePicker.getValue());
+            keyDates.put("Date of Last Promotion", lastPromotionDatePicker.getValue());
 
             // Create the employee and add the profile to the DB
             EmployeeProfile newEmployee = new EmployeeProfile(name, address, null, phoneNumber, maritalStatus,
@@ -72,6 +88,35 @@ public class ModifyEmployeeController extends Subcontroller{
 
             // Close the tab
             cancelButton.fire();
+        }
+    }
+
+    public void delete() throws Exception {
+        EmployeeProfile selected = EmployeeTableAdapter.getProfile("EmployeeID", employeeIDComboBox.getValue());
+
+        // Ensure an option has been chosen in the Combo Box
+        if (Objects.equals(employeeIDComboBox.getValue(), null)) {
+            messageLabel.setText("Choose an Employee ID from the combo box");
+        }
+        else {
+            // Deleted account is either a null account, or null account fields
+            if (selected.getAccount() == null ||
+                    (selected.getUsername() == null && selected.getPassword() == null && selected.getEmail() == null)){
+                EmployeeTableAdapter.deleteProfile("EmployeeID", employeeIDComboBox.getValue());
+                cancelButton.fire();
+            }
+            // Alert to tell the user they must delete the account first
+            else{
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("deleteAlert-view.fxml"));
+                Parent parent = (Parent) fxmlLoader.load();
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/se2203b/ipayroll/WesternLogo.png"));
+                stage.setTitle("");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
         }
     }
 
@@ -93,6 +138,5 @@ public class ModifyEmployeeController extends Subcontroller{
         lastPromotionDatePicker.setEditable(false);
         birthDatePicker.setEditable(false);
         hireDatePicker.setEditable(false);
-
     }
 }

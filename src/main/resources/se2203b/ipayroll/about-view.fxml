@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="305.0" prefWidth="336.0" style="-fx-background-color: whitesmoke;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se2203b.ipayroll.AboutController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="305.0" prefWidth="336.0" style="-fx-background-color: whitesmoke;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se2203b.ipayroll.Subcontroller">
    <bottom>
-      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="51.0" text="OK" BorderPane.alignment="CENTER_RIGHT">
+      <Button fx:id="cancelButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="51.0" text="OK" BorderPane.alignment="CENTER_RIGHT">
          <BorderPane.margin>
             <Insets bottom="10.0" right="30.0" />
          </BorderPane.margin>

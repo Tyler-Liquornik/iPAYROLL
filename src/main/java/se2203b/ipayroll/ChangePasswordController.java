@@ -1,14 +1,11 @@
 package se2203b.ipayroll;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class ChangePasswordController extends Subcontroller{
     @FXML
@@ -22,7 +19,6 @@ public class ChangePasswordController extends Subcontroller{
         return titleLabel;
     }
 
-    @Override
     public void save() throws SQLException {
         // Ensure the form is filled out properly
         if (!Objects.equals(getMainController().getLoggedIn().getPassword(), oldPasswordField.getText()))
@@ -35,13 +31,8 @@ public class ChangePasswordController extends Subcontroller{
             EmployeeProfile loggedIn = getMainController().getLoggedIn();
             loggedIn.setPassword(newPasswordField.getText());
             EmployeeTableAdapter.updateProfile(loggedIn);
+            getMainController().logout();
             cancelButton.fire();
         }
     }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
 }

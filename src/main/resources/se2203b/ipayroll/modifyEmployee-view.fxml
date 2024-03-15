@@ -80,7 +80,7 @@
       <Button fx:id="saveButton" layoutX="720.0" layoutY="501.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="60.0" text="Save" />
       <Button fx:id="cancelButton" layoutX="635.0" layoutY="501.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" text="Cancel" />
       <Label fx:id="messageLabel" layoutX="150.0" layoutY="505.0" textFill="RED" />
-      <ComboBox fx:id="employeeIDComboBox" layoutX="157.0" layoutY="124.0" prefHeight="25.0" prefWidth="100.0" />
+      <ComboBox fx:id="employeeIDComboBox" layoutX="157.0" layoutY="124.0" onAction="#populateFields" prefHeight="25.0" prefWidth="100.0" />
       <Button fx:id="deleteButton" layoutX="20.0" layoutY="501.0" mnemonicParsing="false" onAction="#delete" prefHeight="25.0" prefWidth="60.0" text="Delete" textFill="RED">
          <font>
             <Font name="System Bold" size="12.0" />

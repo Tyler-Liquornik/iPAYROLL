@@ -22,7 +22,7 @@ public class LoginController extends Subcontroller{
         messageLabel.setText(message);
     }
 
-    @Override
+
     public void save() throws SQLException {
         // Check that the profile exists by username
         if (EmployeeTableAdapter.getProfile("Username", usernameField.getText()) != null)
@@ -49,7 +49,6 @@ public class LoginController extends Subcontroller{
         getMainController().setPrivileges(profile.getEmployeeID().charAt(0) == 'A'); // first char A -> admin profile
     }
 
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Load the western logo image

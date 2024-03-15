@@ -2,7 +2,6 @@ package se2203b.ipayroll;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -67,8 +66,12 @@ public class IPayrollController implements Initializable {
         showWindow("about-view.fxml", "About Us");
     }
 
-    public void showCreateUser() throws Exception{
-        showWindow("createUser-view.fxml", "Create User Account");
+    public void showCreateAccount() throws Exception{
+        showWindow("createAccount-view.fxml", "Create User Account");
+    }
+
+    public void showDeleteAccount() throws Exception{
+        showWindow("deleteAccount-view.fxml", "Delete User Account");
     }
 
     public void showLogin() throws Exception{
